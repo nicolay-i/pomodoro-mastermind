@@ -30,6 +30,7 @@
  
  export interface PomodoroSettings {
    theme: 'light' | 'dark';
+  designStyle: 'glassmorphism' | 'flat';
    timerSettings: TimerSettings;
    notifications: NotificationSettings;
    integrations: IntegrationSettings;
@@ -40,6 +41,7 @@
  
  export const DEFAULT_SETTINGS: PomodoroSettings = {
    theme: 'dark',
+  designStyle: 'glassmorphism',
    timerSettings: {
      workDuration: 25 * 60,
      shortBreakDuration: 5 * 60,

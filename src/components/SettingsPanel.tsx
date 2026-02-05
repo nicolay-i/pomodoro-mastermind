@@ -1,19 +1,23 @@
  import { Bell, BellOff, Send, Webhook } from 'lucide-react';
+import { Palette } from 'lucide-react';
  import { Switch } from '@/components/ui/switch';
  import { Input } from '@/components/ui/input';
  import { Button } from '@/components/ui/button';
  import { Textarea } from '@/components/ui/textarea';
  import { Label } from '@/components/ui/label';
  import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
  import { NotificationSettings, TelegramSettings, WebhookSettings } from '@/types/pomodoro';
  
  interface SettingsPanelProps {
    notifications: NotificationSettings;
    telegram: TelegramSettings;
    webhook: WebhookSettings;
+  designStyle: 'glassmorphism' | 'flat';
    onUpdateNotifications: (n: Partial<NotificationSettings>) => void;
    onUpdateTelegram: (t: Partial<TelegramSettings>) => void;
    onUpdateWebhook: (w: Partial<WebhookSettings>) => void;
+  onSetDesignStyle: (style: 'glassmorphism' | 'flat') => void;
    onTestTelegram: (token: string, chatId: string) => Promise<boolean>;
    onTestWebhook: (url: string, payload: string) => Promise<boolean>;
  }
@@ -22,14 +26,43 @@
    notifications,
    telegram,
    webhook,
+  designStyle,
    onUpdateNotifications,
    onUpdateTelegram,
    onUpdateWebhook,
+  onSetDesignStyle,
    onTestTelegram,
    onTestWebhook,
  }: SettingsPanelProps) {
    return (
      <div className="w-full max-w-2xl mx-auto space-y-6">
+      {/* Design Style */}
+      <Card className="glass-card border-0">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Palette className="h-5 w-5" />
+            Стиль дизайна
+          </CardTitle>
+          <CardDescription>Выберите визуальный стиль интерфейса</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <RadioGroup
+            value={designStyle}
+            onValueChange={(value) => onSetDesignStyle(value as 'glassmorphism' | 'flat')}
+            className="flex gap-4"
+          >
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="glassmorphism" id="glassmorphism" />
+              <Label htmlFor="glassmorphism">Glassmorphism</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="flat" id="flat" />
+              <Label htmlFor="flat">Flat Design</Label>
+            </div>
+          </RadioGroup>
+        </CardContent>
+      </Card>
+
        {/* Notifications */}
        <Card className="glass-card border-0">
          <CardHeader>

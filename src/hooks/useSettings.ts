@@ -28,6 +28,10 @@
      document.documentElement.classList.toggle('dark', settings.theme === 'dark');
    }, [settings.theme]);
  
+  useEffect(() => {
+    document.documentElement.classList.toggle('flat', settings.designStyle === 'flat');
+  }, [settings.designStyle]);
+
    const toggleTheme = useCallback(() => {
      setSettings(prev => ({
        ...prev,
@@ -35,6 +39,10 @@
      }));
    }, []);
  
+  const setDesignStyle = useCallback((designStyle: PomodoroSettings['designStyle']) => {
+    setSettings(prev => ({ ...prev, designStyle }));
+  }, []);
+
    const updateNotifications = useCallback((notifications: Partial<PomodoroSettings['notifications']>) => {
      setSettings(prev => ({
        ...prev,
@@ -75,6 +83,7 @@
    return {
      settings,
      toggleTheme,
+    setDesignStyle,
      updateNotifications,
      updateTelegram,
      updateWebhook,

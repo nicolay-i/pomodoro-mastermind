@@ -153,4 +153,29 @@ All colors MUST be HSL.
       hsl(var(--pomodoro-long-break) / 0.3) 0%, 
       hsl(var(--pomodoro-long-break-glow) / 0.1) 100%);
   }
+
+  /* Flat design style overrides */
+  .flat .glass {
+    background: hsl(var(--card));
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: 1px solid hsl(var(--border));
+    box-shadow: none;
+  }
+
+  .flat .glass-card {
+    @apply rounded-lg;
+  }
+
+  .flat .gradient-bg-work {
+    background: hsl(var(--pomodoro-work) / 0.15);
+  }
+
+  .flat .gradient-bg-short-break {
+    background: hsl(var(--pomodoro-short-break) / 0.15);
+  }
+
+  .flat .gradient-bg-long-break {
+    background: hsl(var(--pomodoro-long-break) / 0.15);
+  }
 }
