@@ -1,5 +1,6 @@
- import { Moon, Sun, Timer } from 'lucide-react';
+  import { Moon, Sun } from 'lucide-react';
  import { Button } from '@/components/ui/button';
+  import faviconImg from '/favicon.png';
  
  interface HeaderProps {
    theme: 'light' | 'dark';
@@ -10,9 +11,7 @@
    return (
      <header className="w-full flex items-center justify-between px-4 py-4 md:px-8">
        <div className="flex items-center gap-2">
-         <div className="p-2 rounded-xl glass">
-           <Timer className="h-6 w-6 text-pomodoro-work" />
-         </div>
+          <img src={faviconImg} alt="Pomodoro" className="h-10 w-10" />
          <h1 className="text-xl font-bold text-foreground">Pomodoro</h1>
        </div>
        
