@@ -12,6 +12,7 @@ const Index = () => {
   const {
     settings,
     toggleTheme,
+    setDesignStyle,
     updateNotifications,
     updateTelegram,
     updateWebhook,
@@ -80,9 +81,11 @@ const Index = () => {
               notifications={settings.notifications}
               telegram={settings.integrations.telegram}
               webhook={settings.integrations.webhook}
+              designStyle={settings.designStyle}
               onUpdateNotifications={updateNotifications}
               onUpdateTelegram={updateTelegram}
               onUpdateWebhook={updateWebhook}
+              onSetDesignStyle={setDesignStyle}
               onTestTelegram={testTelegram}
               onTestWebhook={testWebhook}
             />
