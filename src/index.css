@@ -38,6 +38,19 @@ All colors MUST be HSL.
 
     --radius: 0.5rem;
 
+    /* Pomodoro mode colors */
+    --pomodoro-work: 15 90% 55%;
+    --pomodoro-work-glow: 15 100% 60%;
+    --pomodoro-short-break: 142 70% 45%;
+    --pomodoro-short-break-glow: 142 80% 50%;
+    --pomodoro-long-break: 217 90% 60%;
+    --pomodoro-long-break-glow: 217 100% 65%;
+
+    /* Glassmorphism tokens */
+    --glass-bg: 0 0% 100% / 0.7;
+    --glass-border: 0 0% 100% / 0.3;
+    --glass-shadow: 0 0% 0% / 0.1;
+
     --sidebar-background: 0 0% 98%;
 
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -83,6 +96,12 @@ All colors MUST be HSL.
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+
+    /* Dark mode glassmorphism */
+    --glass-bg: 222 84% 8% / 0.6;
+    --glass-border: 210 40% 98% / 0.1;
+    --glass-shadow: 0 0% 0% / 0.3;
+
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -101,5 +120,37 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .glass {
+    background: hsl(var(--glass-bg));
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid hsl(var(--glass-border));
+    box-shadow: 0 8px 32px hsl(var(--glass-shadow));
+  }
+
+  .glass-card {
+    @apply glass rounded-2xl;
+  }
+
+  .gradient-bg-work {
+    background: linear-gradient(135deg, 
+      hsl(var(--pomodoro-work) / 0.3) 0%, 
+      hsl(var(--pomodoro-work-glow) / 0.1) 100%);
+  }
+
+  .gradient-bg-short-break {
+    background: linear-gradient(135deg, 
+      hsl(var(--pomodoro-short-break) / 0.3) 0%, 
+      hsl(var(--pomodoro-short-break-glow) / 0.1) 100%);
+  }
+
+  .gradient-bg-long-break {
+    background: linear-gradient(135deg, 
+      hsl(var(--pomodoro-long-break) / 0.3) 0%, 
+      hsl(var(--pomodoro-long-break-glow) / 0.1) 100%);
   }
 }
