@@ -73,7 +73,7 @@
  };
  
  export const MODE_LABELS: Record<TimerMode, string> = {
-   work: 'Work',
-   shortBreak: 'Short Break',
-   longBreak: 'Long Break',
+  work: 'Работа',
+  shortBreak: 'Короткий перерыв',
+  longBreak: 'Длинный перерыв',
  };

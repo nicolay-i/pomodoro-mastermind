@@ -51,7 +51,7 @@
  
        if (Notification.permission === 'granted') {
          new Notification('Pomodoro Timer', {
-           body: `${MODE_LABELS[mode]} session completed!`,
+            body: `Сессия "${MODE_LABELS[mode]}" завершена!`,
            icon: '/favicon.ico',
          });
        }
@@ -71,7 +71,7 @@
            headers: { 'Content-Type': 'application/json' },
            body: JSON.stringify({
              chat_id: telegram.chatId,
-             text: `🍅 Pomodoro: ${MODE_LABELS[mode]} session completed!`,
+              text: `🍅 Pomodoro: Сессия "${MODE_LABELS[mode]}" завершена!`,
            }),
          }
        );
@@ -82,8 +82,8 @@
      } catch (e) {
        console.error('Failed to send Telegram message:', e);
        toast({
-         title: 'Telegram Error',
-         description: 'Failed to send message. Check your credentials.',
+          title: 'Ошибка Telegram',
+          description: 'Не удалось отправить сообщение. Проверьте данные.',
          variant: 'destructive',
        });
      }
@@ -109,8 +109,8 @@
      } catch (e) {
        console.error('Failed to send webhook:', e);
        toast({
-         title: 'Webhook Error',
-         description: 'Failed to send request. Check your URL.',
+          title: 'Ошибка Webhook',
+          description: 'Не удалось отправить запрос. Проверьте URL.',
          variant: 'destructive',
        });
      }
@@ -125,7 +125,7 @@
            headers: { 'Content-Type': 'application/json' },
            body: JSON.stringify({
              chat_id: chatId,
-             text: '🍅 Pomodoro Timer: Test message successful!',
+              text: '🍅 Pomodoro Timer: Тестовое сообщение успешно!',
            }),
          }
        );
@@ -136,14 +136,14 @@
        }
  
        toast({
-         title: 'Success!',
-         description: 'Test message sent to Telegram.',
+          title: 'Успешно!',
+          description: 'Тестовое сообщение отправлено в Telegram.',
        });
        return true;
      } catch (e: any) {
        toast({
-         title: 'Telegram Test Failed',
-         description: e.message || 'Check your Bot Token and Chat ID.',
+          title: 'Ошибка теста Telegram',
+          description: e.message || 'Проверьте токен бота и ID чата.',
          variant: 'destructive',
        });
        return false;
@@ -167,17 +167,17 @@
        }
  
        toast({
-         title: 'Success!',
-         description: 'Webhook test successful.',
+          title: 'Успешно!',
+          description: 'Тест Webhook успешен.',
        });
        return true;
      } catch (e: any) {
        const isCors = e.message?.includes('Failed to fetch');
        toast({
-         title: 'Webhook Test Failed',
+          title: 'Ошибка теста Webhook',
          description: isCors 
-           ? 'CORS error. The target server may not allow cross-origin requests.'
-           : e.message || 'Check your URL and payload.',
+            ? 'Ошибка CORS. Сервер может не разрешать кросс-доменные запросы.'
+            : e.message || 'Проверьте URL и данные.',
          variant: 'destructive',
        });
        return false;
