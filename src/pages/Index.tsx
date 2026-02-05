@@ -53,11 +53,11 @@ const Index = () => {
             <TabsList className="glass-card">
               <TabsTrigger value="timer" className="flex items-center gap-2">
                 <Timer className="h-4 w-4" />
-                Timer
+              Таймер
               </TabsTrigger>
               <TabsTrigger value="settings" className="flex items-center gap-2">
                 <Settings className="h-4 w-4" />
-                Settings
+              Настройки
               </TabsTrigger>
             </TabsList>
           </div>

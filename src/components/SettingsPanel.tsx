@@ -35,15 +35,15 @@
          <CardHeader>
            <CardTitle className="flex items-center gap-2">
              <Bell className="h-5 w-5" />
-             Notifications
+              Уведомления
            </CardTitle>
-           <CardDescription>Configure how you want to be notified when a session ends</CardDescription>
+            <CardDescription>Настройте способы уведомления о завершении сессии</CardDescription>
          </CardHeader>
          <CardContent className="space-y-4">
            <div className="flex items-center justify-between">
              <Label htmlFor="sound" className="flex items-center gap-2">
                {notifications.sound ? <Bell className="h-4 w-4" /> : <BellOff className="h-4 w-4" />}
-               Sound Notification
+                Звуковое уведомление
              </Label>
              <Switch
                id="sound"
@@ -53,7 +53,7 @@
            </div>
            <div className="flex items-center justify-between">
              <Label htmlFor="browser" className="flex items-center gap-2">
-               Browser Push Notification
+                Push-уведомление в браузере
              </Label>
              <Switch
                id="browser"
@@ -69,13 +69,13 @@
          <CardHeader>
            <CardTitle className="flex items-center gap-2">
              <Send className="h-5 w-5" />
-             Telegram Integration
+              Интеграция с Telegram
            </CardTitle>
-           <CardDescription>Send notifications to your Telegram chat</CardDescription>
+            <CardDescription>Отправляйте уведомления в ваш Telegram-чат</CardDescription>
          </CardHeader>
          <CardContent className="space-y-4">
            <div className="flex items-center justify-between">
-             <Label htmlFor="telegram-enabled">Enable Telegram</Label>
+              <Label htmlFor="telegram-enabled">Включить Telegram</Label>
              <Switch
                id="telegram-enabled"
                checked={telegram.enabled}
@@ -86,7 +86,7 @@
            {telegram.enabled && (
              <>
                <div className="space-y-2">
-                 <Label htmlFor="bot-token">Bot Token</Label>
+                  <Label htmlFor="bot-token">Токен бота</Label>
                  <Input
                    id="bot-token"
                    type="password"
@@ -97,7 +97,7 @@
                  />
                </div>
                <div className="space-y-2">
-                 <Label htmlFor="chat-id">Chat ID</Label>
+                  <Label htmlFor="chat-id">ID чата</Label>
                  <Input
                    id="chat-id"
                    placeholder="-1001234567890"
@@ -112,7 +112,7 @@
                  disabled={!telegram.token || !telegram.chatId}
                  className="glass"
                >
-                 Test Connection
+                  Проверить подключение
                </Button>
              </>
            )}
@@ -124,13 +124,13 @@
          <CardHeader>
            <CardTitle className="flex items-center gap-2">
              <Webhook className="h-5 w-5" />
-             Custom Webhook
+              Пользовательский Webhook
            </CardTitle>
-           <CardDescription>Send POST requests to your custom endpoint</CardDescription>
+            <CardDescription>Отправляйте POST-запросы на ваш endpoint</CardDescription>
          </CardHeader>
          <CardContent className="space-y-4">
            <div className="flex items-center justify-between">
-             <Label htmlFor="webhook-enabled">Enable Webhook</Label>
+              <Label htmlFor="webhook-enabled">Включить Webhook</Label>
              <Switch
                id="webhook-enabled"
                checked={webhook.enabled}
@@ -141,7 +141,7 @@
            {webhook.enabled && (
              <>
                <div className="space-y-2">
-                 <Label htmlFor="webhook-url">Target URL</Label>
+                  <Label htmlFor="webhook-url">URL-адрес</Label>
                  <Input
                    id="webhook-url"
                    type="url"
@@ -152,7 +152,7 @@
                  />
                </div>
                <div className="space-y-2">
-                 <Label htmlFor="webhook-payload">JSON Payload</Label>
+                  <Label htmlFor="webhook-payload">JSON-данные</Label>
                  <Textarea
                    id="webhook-payload"
                    placeholder='{"event": "pomodoro_complete", "timestamp": "{{timestamp}}"}'
@@ -162,7 +162,7 @@
                    rows={4}
                  />
                  <p className="text-xs text-muted-foreground">
-                   Use {"{{timestamp}}"} and {"{{mode}}"} as placeholders
+                    Используйте {"{{timestamp}}"} и {"{{mode}}"} как плейсхолдеры
                  </p>
                </div>
                <Button
@@ -171,7 +171,7 @@
                  disabled={!webhook.url}
                  className="glass"
                >
-                 Test Webhook
+                  Проверить Webhook
                </Button>
              </>
            )}
