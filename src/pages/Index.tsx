@@ -13,13 +13,14 @@ const Index = () => {
     settings,
     toggleTheme,
     setDesignStyle,
+    setTimerTextColor,
     updateNotifications,
     updateTelegram,
     updateWebhook,
     incrementSessions,
   } = useSettings();
 
-  const { notifyComplete, testTelegram, testWebhook } = useNotifications({
+  const { notifyComplete, testTelegram, testWebhook, testSound, testBrowserNotification } = useNotifications({
     notifications: settings.notifications,
     telegram: settings.integrations.telegram,
     webhook: settings.integrations.webhook,
@@ -69,6 +70,7 @@ const Index = () => {
               formattedTime={timer.formattedTime}
               isRunning={timer.isRunning}
               sessionsCompleted={settings.stats.sessionsCompleted}
+              timerTextColor={settings.timerTextColor}
               onStart={timer.start}
               onPause={timer.pause}
               onReset={timer.reset}
@@ -82,12 +84,16 @@ const Index = () => {
               telegram={settings.integrations.telegram}
               webhook={settings.integrations.webhook}
               designStyle={settings.designStyle}
+              timerTextColor={settings.timerTextColor}
               onUpdateNotifications={updateNotifications}
               onUpdateTelegram={updateTelegram}
               onUpdateWebhook={updateWebhook}
               onSetDesignStyle={setDesignStyle}
+              onSetTimerTextColor={setTimerTextColor}
               onTestTelegram={testTelegram}
               onTestWebhook={testWebhook}
+              onTestSound={testSound}
+              onTestBrowserNotification={testBrowserNotification}
             />
           </TabsContent>
         </Tabs>
