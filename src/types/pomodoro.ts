@@ -28,21 +28,25 @@
    webhook: WebhookSettings;
  }
  
- export interface PomodoroSettings {
-   theme: 'light' | 'dark';
+export type TimerTextColor = 'orange' | 'green' | 'blue' | 'purple' | 'white';
+
+export interface PomodoroSettings {
+  theme: 'light' | 'dark';
   designStyle: 'glassmorphism' | 'flat';
-   timerSettings: TimerSettings;
-   notifications: NotificationSettings;
-   integrations: IntegrationSettings;
-   stats: {
-     sessionsCompleted: number;
-   };
- }
+  timerTextColor: TimerTextColor;
+  timerSettings: TimerSettings;
+  notifications: NotificationSettings;
+  integrations: IntegrationSettings;
+  stats: {
+    sessionsCompleted: number;
+  };
+}
  
- export const DEFAULT_SETTINGS: PomodoroSettings = {
-   theme: 'dark',
+export const DEFAULT_SETTINGS: PomodoroSettings = {
+  theme: 'dark',
   designStyle: 'glassmorphism',
-   timerSettings: {
+  timerTextColor: 'orange',
+  timerSettings: {
      workDuration: 25 * 60,
      shortBreakDuration: 5 * 60,
      longBreakDuration: 15 * 60,

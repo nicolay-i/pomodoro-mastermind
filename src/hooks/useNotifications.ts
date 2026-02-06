@@ -11,54 +11,101 @@
  export function useNotifications({ notifications, telegram, webhook }: UseNotificationsProps) {
    const audioContextRef = useRef<AudioContext | null>(null);
  
-   const playSound = useCallback(() => {
-     if (!notifications.sound) return;
+  const playSound = useCallback((forcePlay = false) => {
+    if (!forcePlay && !notifications.sound) return;
+
+    try {
+      // Create AudioContext on first use
+      if (!audioContextRef.current) {
+        audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+      }
+
+      const ctx = audioContextRef.current;
+      
+      // Resume context if suspended (browser policy)
+      if (ctx.state === 'suspended') {
+        ctx.resume();
+      }
+      
+      const oscillator = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+
+      oscillator.connect(gainNode);
+      gainNode.connect(ctx.destination);
+
+      oscillator.frequency.setValueAtTime(800, ctx.currentTime);
+      oscillator.frequency.setValueAtTime(600, ctx.currentTime + 0.1);
+      oscillator.frequency.setValueAtTime(800, ctx.currentTime + 0.2);
+
+      gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+
+      oscillator.start(ctx.currentTime);
+      oscillator.stop(ctx.currentTime + 0.5);
+      
+      if (forcePlay) {
+        toast({
+          title: 'Звук работает!',
+          description: 'Звуковое уведомление успешно воспроизведено.',
+        });
+      }
+    } catch (e) {
+      console.error('Failed to play sound:', e);
+      if (forcePlay) {
+        toast({
+          title: 'Ошибка звука',
+          description: 'Не удалось воспроизвести звук.',
+          variant: 'destructive',
+        });
+      }
+    }
+  }, [notifications.sound]);
  
-     try {
-       // Create AudioContext on first use
-       if (!audioContextRef.current) {
-         audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
-       }
- 
-       const ctx = audioContextRef.current;
-       const oscillator = ctx.createOscillator();
-       const gainNode = ctx.createGain();
- 
-       oscillator.connect(gainNode);
-       gainNode.connect(ctx.destination);
- 
-       oscillator.frequency.setValueAtTime(800, ctx.currentTime);
-       oscillator.frequency.setValueAtTime(600, ctx.currentTime + 0.1);
-       oscillator.frequency.setValueAtTime(800, ctx.currentTime + 0.2);
- 
-       gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
-       gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
- 
-       oscillator.start(ctx.currentTime);
-       oscillator.stop(ctx.currentTime + 0.5);
-     } catch (e) {
-       console.error('Failed to play sound:', e);
-     }
-   }, [notifications.sound]);
- 
-   const showBrowserNotification = useCallback(async (mode: TimerMode) => {
-     if (!notifications.browser) return;
- 
-     try {
-       if (Notification.permission === 'default') {
-         await Notification.requestPermission();
-       }
- 
-       if (Notification.permission === 'granted') {
-         new Notification('Pomodoro Timer', {
-            body: `Сессия "${MODE_LABELS[mode]}" завершена!`,
-           icon: '/favicon.ico',
-         });
-       }
-     } catch (e) {
-       console.error('Failed to show notification:', e);
-     }
-   }, [notifications.browser]);
+  const showBrowserNotification = useCallback(async (mode: TimerMode, forceShow = false) => {
+    if (!forceShow && !notifications.browser) return;
+
+    try {
+      if (Notification.permission === 'default') {
+        const permission = await Notification.requestPermission();
+        if (permission !== 'granted') {
+          toast({
+            title: 'Уведомления заблокированы',
+            description: 'Разрешите уведомления в настройках браузера.',
+            variant: 'destructive',
+          });
+          return;
+        }
+      }
+
+      if (Notification.permission === 'granted') {
+        new Notification('Pomodoro Timer', {
+          body: forceShow ? 'Тестовое push-уведомление!' : `Сессия "${MODE_LABELS[mode]}" завершена!`,
+          icon: '/favicon.png',
+        });
+        if (forceShow) {
+          toast({
+            title: 'Push-уведомление отправлено!',
+            description: 'Проверьте системные уведомления.',
+          });
+        }
+      } else if (Notification.permission === 'denied') {
+        toast({
+          title: 'Уведомления заблокированы',
+          description: 'Разрешите уведомления в настройках браузера.',
+          variant: 'destructive',
+        });
+      }
+    } catch (e) {
+      console.error('Failed to show notification:', e);
+      if (forceShow) {
+        toast({
+          title: 'Ошибка уведомления',
+          description: 'Не удалось показать уведомление.',
+          variant: 'destructive',
+        });
+      }
+    }
+  }, [notifications.browser]);
  
    const sendTelegramMessage = useCallback(async (mode: TimerMode) => {
      if (!telegram.enabled || !telegram.token || !telegram.chatId) return;
@@ -191,9 +238,19 @@
      sendWebhook(mode);
    }, [playSound, showBrowserNotification, sendTelegramMessage, sendWebhook]);
  
-   return {
-     notifyComplete,
-     testTelegram,
-     testWebhook,
-   };
+  const testSound = useCallback(() => {
+    playSound(true);
+  }, [playSound]);
+
+  const testBrowserNotification = useCallback(() => {
+    showBrowserNotification('work', true);
+  }, [showBrowserNotification]);
+
+  return {
+    notifyComplete,
+    testTelegram,
+    testWebhook,
+    testSound,
+    testBrowserNotification,
+  };
  }

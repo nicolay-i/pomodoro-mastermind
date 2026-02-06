@@ -1,39 +1,46 @@
- import { Bell, BellOff, Send, Webhook } from 'lucide-react';
-import { Palette } from 'lucide-react';
- import { Switch } from '@/components/ui/switch';
- import { Input } from '@/components/ui/input';
- import { Button } from '@/components/ui/button';
- import { Textarea } from '@/components/ui/textarea';
- import { Label } from '@/components/ui/label';
- import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Bell, BellOff, Send, Webhook, Volume2, BellRing, Palette } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
- import { NotificationSettings, TelegramSettings, WebhookSettings } from '@/types/pomodoro';
- 
- interface SettingsPanelProps {
-   notifications: NotificationSettings;
-   telegram: TelegramSettings;
-   webhook: WebhookSettings;
+import { NotificationSettings, TelegramSettings, WebhookSettings, TimerTextColor } from '@/types/pomodoro';
+
+interface SettingsPanelProps {
+  notifications: NotificationSettings;
+  telegram: TelegramSettings;
+  webhook: WebhookSettings;
   designStyle: 'glassmorphism' | 'flat';
-   onUpdateNotifications: (n: Partial<NotificationSettings>) => void;
-   onUpdateTelegram: (t: Partial<TelegramSettings>) => void;
-   onUpdateWebhook: (w: Partial<WebhookSettings>) => void;
+  timerTextColor: TimerTextColor;
+  onUpdateNotifications: (n: Partial<NotificationSettings>) => void;
+  onUpdateTelegram: (t: Partial<TelegramSettings>) => void;
+  onUpdateWebhook: (w: Partial<WebhookSettings>) => void;
   onSetDesignStyle: (style: 'glassmorphism' | 'flat') => void;
-   onTestTelegram: (token: string, chatId: string) => Promise<boolean>;
-   onTestWebhook: (url: string, payload: string) => Promise<boolean>;
- }
- 
- export function SettingsPanel({
-   notifications,
-   telegram,
-   webhook,
+  onSetTimerTextColor: (color: TimerTextColor) => void;
+  onTestTelegram: (token: string, chatId: string) => Promise<boolean>;
+  onTestWebhook: (url: string, payload: string) => Promise<boolean>;
+  onTestSound: () => void;
+  onTestBrowserNotification: () => void;
+}
+
+export function SettingsPanel({
+  notifications,
+  telegram,
+  webhook,
   designStyle,
-   onUpdateNotifications,
-   onUpdateTelegram,
-   onUpdateWebhook,
+  timerTextColor,
+  onUpdateNotifications,
+  onUpdateTelegram,
+  onUpdateWebhook,
   onSetDesignStyle,
-   onTestTelegram,
-   onTestWebhook,
- }: SettingsPanelProps) {
+  onSetTimerTextColor,
+  onTestTelegram,
+  onTestWebhook,
+  onTestSound,
+  onTestBrowserNotification,
+}: SettingsPanelProps) {
    return (
      <div className="w-full max-w-2xl mx-auto space-y-6">
       {/* Design Style */}
@@ -63,39 +70,115 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
         </CardContent>
       </Card>
 
-       {/* Notifications */}
-       <Card className="glass-card border-0">
-         <CardHeader>
-           <CardTitle className="flex items-center gap-2">
-             <Bell className="h-5 w-5" />
-              Уведомления
-           </CardTitle>
-            <CardDescription>Настройте способы уведомления о завершении сессии</CardDescription>
-         </CardHeader>
-         <CardContent className="space-y-4">
-           <div className="flex items-center justify-between">
-             <Label htmlFor="sound" className="flex items-center gap-2">
-               {notifications.sound ? <Bell className="h-4 w-4" /> : <BellOff className="h-4 w-4" />}
-                Звуковое уведомление
-             </Label>
-             <Switch
-               id="sound"
-               checked={notifications.sound}
-               onCheckedChange={(checked) => onUpdateNotifications({ sound: checked })}
-             />
-           </div>
-           <div className="flex items-center justify-between">
-             <Label htmlFor="browser" className="flex items-center gap-2">
-                Push-уведомление в браузере
-             </Label>
-             <Switch
-               id="browser"
-               checked={notifications.browser}
-               onCheckedChange={(checked) => onUpdateNotifications({ browser: checked })}
-             />
-           </div>
-         </CardContent>
-       </Card>
+      {/* Timer Text Color */}
+      <Card className="glass-card border-0">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Palette className="h-5 w-5" />
+            Цвет текста таймера
+          </CardTitle>
+          <CardDescription>Единый цвет для всех режимов таймера</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <RadioGroup
+            value={timerTextColor}
+            onValueChange={(value) => onSetTimerTextColor(value as TimerTextColor)}
+            className="flex flex-wrap gap-4"
+          >
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="orange" id="color-orange" />
+              <Label htmlFor="color-orange" className="flex items-center gap-2">
+                <span className="w-4 h-4 rounded-full bg-pomodoro-work" />
+                Оранжевый
+              </Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="green" id="color-green" />
+              <Label htmlFor="color-green" className="flex items-center gap-2">
+                <span className="w-4 h-4 rounded-full bg-pomodoro-short-break" />
+                Зелёный
+              </Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="blue" id="color-blue" />
+              <Label htmlFor="color-blue" className="flex items-center gap-2">
+                <span className="w-4 h-4 rounded-full bg-pomodoro-long-break" />
+                Синий
+              </Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="purple" id="color-purple" />
+              <Label htmlFor="color-purple" className="flex items-center gap-2">
+                <span className="w-4 h-4 rounded-full bg-purple-500" />
+                Фиолетовый
+              </Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="white" id="color-white" />
+              <Label htmlFor="color-white" className="flex items-center gap-2">
+                <span className="w-4 h-4 rounded-full bg-foreground border" />
+                Белый/Чёрный
+              </Label>
+            </div>
+          </RadioGroup>
+        </CardContent>
+      </Card>
+
+      {/* Notifications */}
+      <Card className="glass-card border-0">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Bell className="h-5 w-5" />
+            Уведомления
+          </CardTitle>
+          <CardDescription>Настройте способы уведомления о завершении сессии</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-between">
+            <Label htmlFor="sound" className="flex items-center gap-2">
+              {notifications.sound ? <Bell className="h-4 w-4" /> : <BellOff className="h-4 w-4" />}
+              Звуковое уведомление
+            </Label>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={onTestSound}
+                className="glass"
+              >
+                <Volume2 className="h-4 w-4 mr-1" />
+                Тест
+              </Button>
+              <Switch
+                id="sound"
+                checked={notifications.sound}
+                onCheckedChange={(checked) => onUpdateNotifications({ sound: checked })}
+              />
+            </div>
+          </div>
+          <div className="flex items-center justify-between">
+            <Label htmlFor="browser" className="flex items-center gap-2">
+              Push-уведомление в браузере
+            </Label>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={onTestBrowserNotification}
+                className="glass"
+              >
+                <BellRing className="h-4 w-4 mr-1" />
+                Тест
+              </Button>
+              <Switch
+                id="browser"
+                checked={notifications.browser}
+                onCheckedChange={(checked) => onUpdateNotifications({ browser: checked })}
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
  
        {/* Telegram */}
        <Card className="glass-card border-0">

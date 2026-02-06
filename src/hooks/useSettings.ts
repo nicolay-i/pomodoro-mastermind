@@ -43,6 +43,10 @@
     setSettings(prev => ({ ...prev, designStyle }));
   }, []);
 
+  const setTimerTextColor = useCallback((timerTextColor: PomodoroSettings['timerTextColor']) => {
+    setSettings(prev => ({ ...prev, timerTextColor }));
+  }, []);
+
    const updateNotifications = useCallback((notifications: Partial<PomodoroSettings['notifications']>) => {
      setSettings(prev => ({
        ...prev,
@@ -80,13 +84,14 @@
      }));
    }, []);
  
-   return {
-     settings,
-     toggleTheme,
+  return {
+    settings,
+    toggleTheme,
     setDesignStyle,
-     updateNotifications,
-     updateTelegram,
-     updateWebhook,
-     incrementSessions,
-   };
+    setTimerTextColor,
+    updateNotifications,
+    updateTelegram,
+    updateWebhook,
+    incrementSessions,
+  };
  }

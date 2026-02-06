@@ -1,18 +1,19 @@
- import { Play, Pause, RotateCcw } from 'lucide-react';
- import { Button } from '@/components/ui/button';
- import { TimerMode, MODE_LABELS } from '@/types/pomodoro';
- import { cn } from '@/lib/utils';
- 
- interface TimerDisplayProps {
-   mode: TimerMode;
-   formattedTime: string;
-   isRunning: boolean;
-   sessionsCompleted: number;
-   onStart: () => void;
-   onPause: () => void;
-   onReset: () => void;
-   onChangeMode: (mode: TimerMode) => void;
- }
+import { Play, Pause, RotateCcw } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { TimerMode, TimerTextColor, MODE_LABELS } from '@/types/pomodoro';
+import { cn } from '@/lib/utils';
+
+interface TimerDisplayProps {
+  mode: TimerMode;
+  formattedTime: string;
+  isRunning: boolean;
+  sessionsCompleted: number;
+  timerTextColor: TimerTextColor;
+  onStart: () => void;
+  onPause: () => void;
+  onReset: () => void;
+  onChangeMode: (mode: TimerMode) => void;
+}
  
  const modes: TimerMode[] = ['work', 'shortBreak', 'longBreak'];
  
@@ -34,17 +35,27 @@
    },
  };
  
- export function TimerDisplay({
-   mode,
-   formattedTime,
-   isRunning,
-   sessionsCompleted,
-   onStart,
-   onPause,
-   onReset,
-   onChangeMode,
- }: TimerDisplayProps) {
-   const currentStyle = modeStyles[mode];
+const TEXT_COLOR_CLASSES: Record<TimerTextColor, string> = {
+  orange: 'text-pomodoro-work',
+  green: 'text-pomodoro-short-break',
+  blue: 'text-pomodoro-long-break',
+  purple: 'text-purple-500',
+  white: 'text-foreground',
+};
+
+export function TimerDisplay({
+  mode,
+  formattedTime,
+  isRunning,
+  sessionsCompleted,
+  timerTextColor,
+  onStart,
+  onPause,
+  onReset,
+  onChangeMode,
+}: TimerDisplayProps) {
+  const currentStyle = modeStyles[mode];
+  const textColorClass = TEXT_COLOR_CLASSES[timerTextColor];
  
    return (
      <div className="flex flex-col items-center gap-8 w-full max-w-md mx-auto">
@@ -67,23 +78,23 @@
        </div>
  
        {/* Timer Card */}
-       <div
-         className={cn(
-           'glass-card p-8 md:p-12 transition-all duration-500',
-           currentStyle.bg,
-           isRunning && currentStyle.glow
-         )}
-       >
-         <div
-           className={cn(
-             'text-7xl md:text-9xl font-mono font-bold tracking-tight transition-colors duration-500',
-             currentStyle.text,
-             isRunning && 'animate-pulse-glow'
-           )}
-         >
-           {formattedTime}
-         </div>
-       </div>
+        <div
+          className={cn(
+            'glass-card p-8 md:p-12 transition-all duration-500',
+            currentStyle.bg,
+            isRunning && currentStyle.glow
+          )}
+        >
+          <div
+            className={cn(
+              'text-7xl md:text-9xl font-mono font-bold tracking-tight transition-colors duration-500',
+              textColorClass,
+              isRunning && 'animate-pulse-glow'
+            )}
+          >
+            {formattedTime}
+          </div>
+        </div>
  
        {/* Controls */}
        <div className="flex items-center gap-4">
